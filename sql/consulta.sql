@@ -1,4 +1,7 @@
--- 1) Maiores níveis médios de água em rios nos últimos 7 dias
+-- Maiores níveis médios de água em rios no último ano
+-- Assim o Sensor deve ser de Nivel de Água
+-- Ponto hidrológico um Rio
+-- Vemos a Leitura nos útlimos 365 dias
 SELECT
     ph.Localizacao_Geografica,
     AVG(l.Valor)      AS media_nivel_agua,
@@ -11,14 +14,13 @@ JOIN Leitura l
      AND l.Sensor_Posicao          = s.Posicao
 WHERE ph.Tipo = 'Rio'
   AND s.Tipo = 'Nível de Água'
-  AND l.Data_Hora >= NOW() - INTERVAL '7 days'
+  AND l.Data_Hora >= NOW() - INTERVAL '365 days'
 GROUP BY ph.Localizacao_Geografica
-HAVING COUNT(*) >= 10
 ORDER BY media_nivel_agua DESC, qtd_leituras DESC
 LIMIT 5;
 
 
--- 2) Bueiros com muitas manutenções e ainda com alagamentos fortes depois da última manutenção
+-- 2 Bueiros com muitas manutenções e ainda com alagamentos fortes depois da última manutenção
 WITH manutencao_bueiro AS (
     SELECT
         m.Bueiro              AS ponto_bueiro,
@@ -52,7 +54,9 @@ ORDER BY
     qtd_alagamentos_pos DESC;
 
 
--- 3) Desempenho da Defesa Civil: pontos monitorados e alagamentos associados ok
+-- 3 Desempenho da Defesa Civil: pontos monitorados e alagamentos associados ok
+-- Dado alguém da Defesa Civil, vemos quantos pontos essa pessoa monitora
+-- e a Severidade dos Alagamentos que acontecem la.
 SELECT
     dc.Usuario                         AS id_defesa_civil,
     dc.Nome,
@@ -74,7 +78,8 @@ ORDER BY
     severidade_media DESC;
 
 
--- 4) Alertas de Ação que já possuem relatório da Equipe de Manutenção e da Defesa Civil   ok
+-- 4 Alertas de Ação que já possuem relatório da Equipe de Manutenção e da Defesa Civil
+-- Vou alterar o Modelo de Acordo
 WITH em AS (
     SELECT
         Id_alerta,
@@ -107,7 +112,7 @@ JOIN dc
 ORDER BY a.Data_Hora DESC;
 
 
--- 5) DIVISÃO RELACIONAL:
+-- 5 DIVISÃO RELACIONAL:
 --    Defesa Civil que monitora TODOS os pontos que possuem sensor pluviométrico
 SELECT
     dc.Usuario,

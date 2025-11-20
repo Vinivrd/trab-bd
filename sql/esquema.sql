@@ -50,7 +50,8 @@ CREATE TABLE Equipe_de_Manutencao (
 -- Tabela para Adm
 CREATE TABLE Adm (
 	Usuario INTEGER PRIMARY KEY,
-
+  Nome VARCHAR(255) NOT NULL,
+  
     CONSTRAINT fk_adm_usuario
         FOREIGN KEY (Usuario) 
         REFERENCES Usuario(CPF)

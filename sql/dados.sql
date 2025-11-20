@@ -38,10 +38,10 @@ INSERT INTO Equipe_de_Manutencao (Usuario, Nome, Num) VALUES
     (7, 'Equipe Zona Sul', 202),
     (12, 'Equipe Zona Norte', 303);
 
-INSERT INTO Adm (Usuario) VALUES
-    (4),
-    (8),
-    (9);
+INSERT INTO Adm (Usuario, Nome) VALUES
+    (4, 'Monica Lima'),
+    (8, 'Cleber Gonzaga'),
+    (9, 'Vigario Mario');
 
 -- -----------------------------
 -- PONTOS HIDROLÓGICOS E TIPOS
@@ -88,21 +88,21 @@ INSERT INTO Sensor (Ponto_Hidrologico, Posicao, Tipo) VALUES
 -- LEITURAS DOS SENSORES
 -- -----------------------------
 INSERT INTO Leitura (Data_Hora, Sensor_Ponto_Hidrologico, Sensor_Posicao, Valor) VALUES
-    ('2025-01-10 08:00:00', 'RIO_TIETE_PONTE_CENTRO', 'Montante', 3.50),
-    ('2025-01-10 08:15:00', 'RIO_TIETE_PONTE_CENTRO', 'Montante', 4.20),
-    ('2025-01-10 08:30:00', 'RIO_TIETE_PONTE_CENTRO', 'Montante', 5.10),
+    ('2025-11-10 08:00:00', 'RIO_TIETE_PONTE_CENTRO', 'Montante', 3.50),
+    ('2025-11-10 08:15:00', 'RIO_TIETE_PONTE_CENTRO', 'Montante', 4.20),
+    ('2025-11-10 08:30:00', 'RIO_TIETE_PONTE_CENTRO', 'Montante', 5.10),
 
-    ('2025-01-10 08:00:00', 'RIO_TIETE_PONTE_CENTRO', 'Jusante',  3.20),
-    ('2025-01-10 08:15:00', 'RIO_TIETE_PONTE_CENTRO', 'Jusante',  3.90),
+    ('2025-11-09 08:00:00', 'RIO_TIETE_PONTE_CENTRO', 'Jusante',  3.20),
+    ('2025-11-09 08:15:00', 'RIO_TIETE_PONTE_CENTRO', 'Jusante',  3.90),
 
-    ('2025-01-10 08:00:00', 'CORREGO_SANTA_PAULA',    'Centro',   1.80),
-    ('2025-01-10 08:30:00', 'CORREGO_SANTA_PAULA',    'Centro',   2.50),
+    ('2025-10-10 08:00:00', 'CORREGO_SANTA_PAULA',    'Centro',   1.80),
+    ('2025-08-10 08:30:00', 'CORREGO_SANTA_PAULA',    'Centro',   2.50),
 
-    ('2025-01-10 07:45:00', 'BUEIRO_AV1_Q3',          'Entrada',  20.00),
-    ('2025-01-10 08:15:00', 'BUEIRO_AV1_Q3',          'Entrada',  45.00),
+    ('2025-09-10 07:45:00', 'BUEIRO_AV1_Q3',          'Entrada',  20.00),
+    ('2025-05-10 08:15:00', 'BUEIRO_AV1_Q3',          'Entrada',  45.00),
 
-    ('2025-01-15 17:00:00', 'BUEIRO_AV2_Q10',         'Entrada',  30.00),
-    ('2025-01-15 17:20:00', 'BUEIRO_AV2_Q10',         'Entrada',  70.00);
+    ('2025-04-15 17:00:00', 'BUEIRO_AV2_Q10',         'Entrada',  30.00),
+    ('2025-03-15 17:20:00', 'BUEIRO_AV2_Q10',         'Entrada',  70.00);
 
 
 -- -----------------------------
@@ -208,14 +208,11 @@ INSERT INTO Alerta_Enchente (
 INSERT INTO Alerta_Enchente_Usuario (
     Id_alerta,
     Id_usuario
-) VALUES
-    -- Alerta de 10/01 para cidadãos e Defesa Civil principal
+) VALUES   -- Alerta de 10/01 para cidadãos e Defesa Civil principal
     ('2025-01-10 08:50:00', 1),  -- João (Cidadão)
     ('2025-01-10 08:50:00', 5),  -- Maria (Cidadão)
     ('2025-01-10 08:50:00', 2),  -- Carlos (Defesa Civil)
-
-    -- Alerta de 15/01 para outro conjunto de usuários
-    ('2025-01-15 17:35:00', 5),  -- Maria
+    ('2025-01-15 17:35:00', 5),  -- Alerta de 15/01 para outro conjunto de usuários -- Maria
     ('2025-01-15 17:35:00', 6);  -- Ana (Defesa Civil)
 
 
