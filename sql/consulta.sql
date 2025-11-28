@@ -79,7 +79,6 @@ ORDER BY
 
 
 -- 4 Alertas de Ação que já possuem relatório da Equipe de Manutenção e da Defesa Civil
--- Vou alterar o Modelo de Acordo
 WITH em AS (
     SELECT
         Id_alerta,
@@ -113,7 +112,7 @@ ORDER BY a.Data_Hora DESC;
 
 
 -- 5 DIVISÃO RELACIONAL:
---    Defesa Civil que monitora TODOS os pontos que possuem sensor pluviométrico
+--  Defesa Civil que monitora TODOS os pontos que possuem sensor pluviométrico
 SELECT
     dc.Usuario,
     dc.Nome
