@@ -85,15 +85,6 @@ def create_connection():
             print(exc)
             sys.exit(1)
 
-    elif db_type == "oracle":
-        # Espaço reservado caso desejem implementar suporte a Oracle.
-        print("Suporte a Oracle não implementado neste protótipo.")
-        sys.exit(1)
-
-    else:
-        print(f"Tipo de banco de dados não suportado: {db_type}")
-        sys.exit(1)
-
 
 def cadastrar_cidadao(conn) -> None:
     """Cadastra um novo cidadão.
