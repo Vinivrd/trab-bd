@@ -51,28 +51,36 @@ ORDER BY
     qtd_alagamentos_pos DESC;
 
 
--- 3 Desempenho da Defesa Civil: pontos monitorados e alagamentos associados ok
--- Dado alguém da Defesa Civil, vemos quantos pontos essa pessoa monitora
--- e a Severidade dos Alagamentos que acontecem la.
+-- 3 Desempenho da Defesa Civil: alertas respondidos e tempo médio de resposta
+-- Para cada agente da Defesa Civil, conta quantos alertas de ação ele respondeu
+-- e o tempo médio de resposta entre a emissão do alerta e a primeira ação.
+
+WITH primeira_acao_dc AS (
+    SELECT
+        r.Id_defesacivil,
+        r.Id_alerta,
+        MIN(r.Data_Hora) AS primeira_acao_dc
+    FROM Relatorio_de_Acao_DC r
+    GROUP BY
+        r.Id_defesacivil,
+        r.Id_alerta
+)
 SELECT
-    dc.Usuario                         AS id_defesa_civil,
+    dc.Usuario AS id_defesa_civil,
     dc.Nome,
-    COUNT(DISTINCT m.Ponto_Hidrologico) AS qtd_pontos_monitorados,
-    COUNT(DISTINCT a.Data_Hora)         AS qtd_alagamentos_registrados,
-    COALESCE(AVG(a.Severidade), 0)      AS severidade_media
+    COUNT(DISTINCT p.Id_alerta) AS qtd_alertas_respondidos,
+    AVG(p.primeira_acao_dc - a.Data_Hora) AS tempo_medio_resposta
 FROM Defesa_Civil dc
-LEFT JOIN Monitora m
-       ON m.Defesa_Civil = dc.Usuario
-LEFT JOIN Alagamento a
-       ON a.Ponto_Hidrologico = m.Ponto_Hidrologico
+JOIN primeira_acao_dc p
+      ON p.Id_defesacivil = dc.Usuario
+JOIN Alerta_de_Acao a
+      ON a.Data_Hora = p.Id_alerta
 GROUP BY
     dc.Usuario,
     dc.Nome
-HAVING
-    COUNT(DISTINCT m.Ponto_Hidrologico) > 0
 ORDER BY
-    qtd_alagamentos_registrados DESC,
-    severidade_media DESC;
+    qtd_alertas_respondidos DESC,
+    tempo_medio_resposta;
 
 
 -- 4 Alertas de Ação que já possuem relatório da Equipe de Manutenção e da Defesa Civil
