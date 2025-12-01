@@ -1,7 +1,4 @@
--- Maiores níveis médios de água em rios no último ano
--- Assim o Sensor deve ser de Nivel de Água
--- Ponto hidrológico um Rio
--- Vemos a Leitura nos útlimos 365 dias
+-- 1 Monitoramento de Níveis de Água em Rios nos Últimos 12 Meses
 SELECT
     ph.Localizacao_Geografica,
     AVG(l.Valor)      AS media_nivel_agua,
@@ -82,33 +79,33 @@ ORDER BY
 WITH em AS (
     SELECT
         Id_alerta,
-        COUNT(*)           AS qtd_em,
-        MIN(Data_Hora)     AS primeira_acao_em
+        COUNT(*) AS qtd_em,
+        MIN(Data_Hora) AS primeira_acao_em
     FROM Relatorio_de_Acao_EM
     GROUP BY Id_alerta
 ),
 dc AS (
     SELECT
         Id_alerta,
-        COUNT(*)           AS qtd_dc,
-        MIN(Data_Hora)     AS primeira_acao_dc
+        COUNT(*) AS qtd_dc,
+        MIN(Data_Hora) AS primeira_acao_dc
     FROM Relatorio_de_Acao_DC
     GROUP BY Id_alerta
 )
 SELECT
-    a.Data_Hora              AS id_alerta,
+    a.Data_Hora AS id_alerta,
     a.Conteudo_da_Mensagem,
     a.Status_da_Resposta,
     em.qtd_em,
     dc.qtd_dc,
     em.primeira_acao_em,
-    dc.primeira_acao_dc
+    dc.primeira_acao_dc,
+    LEAST(em.primeira_acao_em, dc.primeira_acao_dc) - a.Data_Hora AS tempo_resposta
 FROM Alerta_de_Acao a
-JOIN em
-      ON em.Id_alerta = a.Data_Hora
-JOIN dc
-      ON dc.Id_alerta = a.Data_Hora
+LEFT JOIN em ON em.Id_alerta = a.Data_Hora
+LEFT JOIN dc ON dc.Id_alerta = a.Data_Hora
 ORDER BY a.Data_Hora DESC;
+
 
 
 -- 5 DIVISÃO RELACIONAL:

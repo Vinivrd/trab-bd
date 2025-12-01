@@ -1,269 +1,150 @@
 -- ==========================================================
--- ARQUIVO DE INSERTS PARA O ESQUEMA ATUAL
--- Ordem: Usuario → especializações → Ponto_Hidrologico → especializações
---        Sensor → Leitura → Monitora → Alagamento → Manutencao
---        Alertas (Ação / Enchente) → Alerta_Enchente_Usuario
---        Relatorios EM / DC
+-- ARQUIVO DE DADOS (SEEDS) - VALIDADO PARA O ESQUEMA FINAL
 -- ==========================================================
 
 -- -----------------------------
--- USUÁRIOS E ESPECIALIZAÇÕES
+-- 1. USUÁRIOS (CPFs válidos e Tipos corretos)
 -- -----------------------------
 INSERT INTO Usuario (CPF, Tipo) VALUES
-    (1, 'Cidadão'), 
-    (2, 'Defesa Civil'),
-    (3, 'Equipe de Manutenção'),
-    (4, 'Administrador'),
-    (5, 'Cidadão'),
-    (6, 'Defesa Civil'),
-    (7, 'Equipe de Manutenção'),
-    (8, 'Administrador'),
-    (9, 'Administrador'),
-    (10, 'Cidadão'),
-    (11, 'Defesa Civil'),
-    (12, 'Equipe de Manutenção');
+    ('111.111.111-01', 'Cidadão'),
+    ('111.111.111-02', 'Cidadão'),
+    ('222.222.222-01', 'Defesa Civil'),      -- Agente Carlos
+    ('222.222.222-02', 'Defesa Civil'),      -- Agente Ana
+    ('333.333.333-01', 'Equipe de Manutenção'), -- Equipe Alfa
+    ('333.333.333-02', 'Equipe de Manutenção'), -- Equipe Beta
+    ('444.444.444-01', 'Administrador');
 
 INSERT INTO Cidadao (Usuario, Nome) VALUES
-    (1, 'João Silva'),
-    (5, 'Maria Souza'),
-    (10, 'Pedro Silva');
+    ('111.111.111-01', 'João Silva'),
+    ('111.111.111-02', 'Maria Souza');
 
 INSERT INTO Defesa_Civil (Usuario, Nome) VALUES
-    (2, 'Carlos Pereira'),
-    (6, 'Ana Oliveira'),
-    (11, 'Luiz Carlos');
+    ('222.222.222-01', 'Carlos Pereira'),
+    ('222.222.222-02', 'Ana Oliveira');
 
 INSERT INTO Equipe_de_Manutencao (Usuario, Nome, Num) VALUES
-    (3, 'Equipe Centro', 101),
-    (7, 'Equipe Zona Sul', 202),
-    (12, 'Equipe Zona Norte', 303);
+    ('333.333.333-01', 'Equipe Alfa - Centro', 101),
+    ('333.333.333-02', 'Equipe Beta - Zona Sul', 202);
 
 INSERT INTO Adm (Usuario, Nome) VALUES
-    (4, 'Monica Lima'),
-    (8, 'Cleber Gonzaga'),
-    (9, 'Vigario Mario');
+    ('444.444.444-01', 'Admin Geral');
 
 -- -----------------------------
--- PONTOS HIDROLÓGICOS E TIPOS
+-- 2. PONTOS HIDROLÓGICOS (Foco em RIOS para a Query 1)
 -- -----------------------------
 INSERT INTO Ponto_Hidrologico (Localizacao_Geografica, Tipo) VALUES
-    ('RIO_TIETE_PONTE_CENTRO',    'Rio'),
-    ('CORREGO_SANTA_PAULA',       'Corrego'),
-    ('BUEIRO_AV1_Q3',             'Bueiro'),
-    ('BUEIRO_AV2_Q10',            'Bueiro'),
-    ('RIO_PINHEIROS_PONTE_OESTE', 'Rio'),
-    ('CORREGO_JARDIM_NORTE',      'Corrego'),
-    ('CORREGO_JARDIM_AZUL',       'Corrego'),
-    ('RIO_TIETE_PONTE_LESTE',     'Rio'),
-    ('CORREGO_SANTA_FE',          'Corrego');
+    ('RIO_TIETE_PONTE_CENTRO',    'Rio'),  
+    ('RIO_PINHEIROS_SUL',         'Rio'), 
+    ('RIO_TAMANDUATEI_LESTE', 'Rio'),
+    ('RIO_JAGUARE_NORTE', 'Rio'),   
+    ('CORREGO_SAPATEIRO',         'Corrego'),
+    ('BUEIRO_RUA_XV',             'Bueiro');
+
 
 INSERT INTO Rio (Ponto_Hidrologico, Capacidade_de_Drenagem) VALUES
     ('RIO_TIETE_PONTE_CENTRO',    5000.00),
-    ('RIO_PINHEIROS_PONTE_OESTE', 4500.00),
-    ('RIO_TIETE_PONTE_LESTE',     4200.00);
+    ('RIO_PINHEIROS_SUL',         4500.00),
+    ('RIO_TAMANDUATEI_LESTE', 3800.00),
+    ('RIO_JAGUARE_NORTE', 2500.00);
 
 INSERT INTO Corrego (Ponto_Hidrologico, Capacidade_de_Drenagem) VALUES
-    ('CORREGO_SANTA_PAULA',  1200.00),
-    ('CORREGO_JARDIM_NORTE', 900.00),
-    ('CORREGO_JARDIM_AZUL',  900.00),
-    ('CORREGO_SANTA_FE',     1100.00);
+    ('CORREGO_SAPATEIRO', 1200.00);
 
 INSERT INTO Bueiro (Ponto_Hidrologico, Capacidade_de_Drenagem) VALUES
-    ('BUEIRO_AV1_Q3',  80.00),
-    ('BUEIRO_AV2_Q10', 65.00);
-
+    ('BUEIRO_RUA_XV', 80.00);
 
 -- -----------------------------
--- SENSORES
+-- 3. SENSORES (Necessários para a tabela Leitura)
 -- -----------------------------
 INSERT INTO Sensor (Ponto_Hidrologico, Posicao, Tipo) VALUES
-    ('RIO_TIETE_PONTE_CENTRO', 'Montante', 'Nível de Água'),
-    ('RIO_TIETE_PONTE_CENTRO', 'Jusante',  'Nível de Água'),
-    ('CORREGO_SANTA_PAULA',    'Centro',   'Nível de Água'),
-    ('BUEIRO_AV1_Q3',          'Entrada',  'Pluviométrico'),
-    ('BUEIRO_AV2_Q10',         'Entrada',  'Pluviométrico');
-
+    ('RIO_TIETE_PONTE_CENTRO', 'Montante', 'Nível de Água'), -- Alvo Query 1
+    ('RIO_TIETE_PONTE_CENTRO', 'Jusante',  'Nível de Água'), -- Alvo Query 1
+    ('RIO_PINHEIROS_SUL',      'Centro',   'Nível de Água'), -- Alvo Query 1
+     ('RIO_TAMANDUATEI_LESTE', 'Centro', 'Nível de Água'), -- Alvo Query 1
+    ('RIO_JAGUARE_NORTE', 'Montante', 'Nível de Água'), -- Alvo Query 1
+    ('BUEIRO_RUA_XV',          'Entrada',  'Pluviométrico');
 
 -- -----------------------------
--- LEITURAS DOS SENSORES
+-- 4. LEITURAS (Dados Recentes para Query 1)
+-- Gerando leituras dentro da janela de "NOW() - 365 days"
 -- -----------------------------
 INSERT INTO Leitura (Data_Hora, Sensor_Ponto_Hidrologico, Sensor_Posicao, Valor) VALUES
-    ('2025-11-10 08:00:00', 'RIO_TIETE_PONTE_CENTRO', 'Montante', 3.50),
-    ('2025-11-10 08:15:00', 'RIO_TIETE_PONTE_CENTRO', 'Montante', 4.20),
-    ('2025-11-10 08:30:00', 'RIO_TIETE_PONTE_CENTRO', 'Montante', 5.10),
+    -- Rio Tiete (Níveis altos para testar a média)
+    (NOW() - INTERVAL '2 days',  'RIO_TIETE_PONTE_CENTRO', 'Montante', 5.50),
+    (NOW() - INTERVAL '1 day',   'RIO_TIETE_PONTE_CENTRO', 'Montante', 6.20),
+    (NOW() - INTERVAL '12 hours','RIO_TIETE_PONTE_CENTRO', 'Montante', 6.80),
+    
+  
+    (NOW() - INTERVAL '2 days',  'RIO_TIETE_PONTE_CENTRO', 'Jusante',  5.10), -- Rio Tiete (Outra posição)
+    (NOW() - INTERVAL '1 day',   'RIO_TIETE_PONTE_CENTRO', 'Jusante',  5.90),
 
-    ('2025-11-09 08:00:00', 'RIO_TIETE_PONTE_CENTRO', 'Jusante',  3.20),
-    ('2025-11-09 08:15:00', 'RIO_TIETE_PONTE_CENTRO', 'Jusante',  3.90),
+    
+    (NOW() - INTERVAL '5 days',  'RIO_PINHEIROS_SUL',      'Centro',   2.10),-- Rio Pinheiros (Níveis mais baixos)
+    (NOW() - INTERVAL '3 days',  'RIO_PINHEIROS_SUL',      'Centro',   2.30),
+    (NOW() - INTERVAL '1 day',   'RIO_PINHEIROS_SUL',      'Centro',   2.50),
 
-    ('2025-10-10 08:00:00', 'CORREGO_SANTA_PAULA',    'Centro',   1.80),
-    ('2025-08-10 08:30:00', 'CORREGO_SANTA_PAULA',    'Centro',   2.50),
+   
+    (NOW() - INTERVAL '7 days', 'RIO_TAMANDUATEI_LESTE', 'Centro', 3.10), -- Rio Tamanduateí (nível moderado)
+    (NOW() - INTERVAL '3 days', 'RIO_TAMANDUATEI_LESTE', 'Centro', 3.50),
 
-    ('2025-09-10 07:45:00', 'BUEIRO_AV1_Q3',          'Entrada',  20.00),
-    ('2025-05-10 08:15:00', 'BUEIRO_AV1_Q3',          'Entrada',  45.00),
+   
+    (NOW() - INTERVAL '6 days', 'RIO_JAGUARE_NORTE', 'Montante', 2.90), -- Rio Jaguaré (nível instável)
+    (NOW() - INTERVAL '2 days', 'RIO_JAGUARE_NORTE', 'Montante', 4.20),
+    (NOW() - INTERVAL '20 days','RIO_JAGUARE_NORTE', 'Montante', 3.60),
 
-    ('2025-04-15 17:00:00', 'BUEIRO_AV2_Q10',         'Entrada',  30.00),
-    ('2025-03-15 17:20:00', 'BUEIRO_AV2_Q10',         'Entrada',  70.00);
-
-
--- -----------------------------
--- MONITORA (DEFESA CIVIL x PONTO)
--- -----------------------------
-INSERT INTO Monitora (Ponto_Hidrologico, Defesa_Civil) VALUES
-    ('RIO_TIETE_PONTE_CENTRO', 2),
-    ('CORREGO_SANTA_PAULA',    2),
-    ('BUEIRO_AV1_Q3',          6),
-    ('BUEIRO_AV2_Q10',         6);
+   
+    (NOW() - INTERVAL '500 days', 'RIO_JAGUARE_NORTE', 'Montante', 1.50), -- Leitura antiga (TESTE para NÃO incluir na Query 1)
 
 
--- -----------------------------
--- ALAGAMENTOS
--- -----------------------------
-INSERT INTO Alagamento (
-    Ponto_Hidrologico,
-    Data_Hora,
-    Severidade,
-    Extensao_da_Area_Afetada,
-    Bairros_Afetados
-) VALUES
-    ('BUEIRO_AV1_Q3',
-     '2025-01-10 08:40:00',
-     7,
-     1.50,
-     'Centro, Bairro Velho'),
-
-    ('BUEIRO_AV2_Q10',
-     '2025-01-15 17:25:00',
-     9,
-     3.20,
-     'Jardim Sul, Vila Nova');
+    (NOW() - INTERVAL '400 days','RIO_TIETE_PONTE_CENTRO', 'Montante', 1.00);    -- Leitura antiga (Mais de 1 ano atrás) - NÃO deve aparecer na Query 1
 
 
 -- -----------------------------
--- MANUTENÇÃO (BUEIRO x EQUIPE)
+-- 5. ALERTAS DE AÇÃO (Base para Query 4)
 -- -----------------------------
-INSERT INTO Manutencao (
-    Bueiro,
-    Equipe_de_Manutencao,
-    Data_Hora,
-    Tipo_de_Servico
-) VALUES
-    ('BUEIRO_AV1_Q3',
-     3,
-     '2025-01-10 10:00:00',
-     'Desobstrução e limpeza do bueiro'),
+INSERT INTO Alerta_de_Acao (Data_Hora, Conteudo_da_Mensagem, Status_da_Resposta) VALUES
+    ('2024-11-20 10:00:00', 'Risco iminente de transbordamento no Centro. Ação conjunta necessária.', 'Em andamento'),    -- Alerta 1: Caso Complexo (Muitas respostas)
 
-    ('BUEIRO_AV2_Q10',
-     7,
-     '2025-01-16 09:30:00',
-     'Limpeza preventiva e inspeção estrutural');
+    
+    
+    ('2024-11-25 14:00:00', 'Obstrução parcial identificada no Rio Pinheiros.', 'Concluído'),    -- Alerta 2: Caso Simples
 
+    ('2024-11-18 08:00:00', 'Nível acima do esperado no Tamanduateí.', 'Concluído'),
+    ('2024-11-27 16:30:00', 'Possível transbordamento no Jaguaré.', 'Em andamento'),
 
--- -----------------------------
--- ALERTAS DE AÇÃO
--- -----------------------------
-INSERT INTO Alerta_de_Acao (
-    Data_Hora,
-    Conteudo_da_Mensagem,
-    Status_da_Resposta
-) VALUES
-    ('2025-01-10 09:00:00',
-     'Nível de água elevado no RIO_TIETE_PONTE_CENTRO. Verificar necessidade de bloqueio parcial da via.',
-     'Pendente'),
+    ('2024-11-28 09:00:00', 'Alerta teste sem mobilização.', 'Pendente'),    -- Alerta 3: Sem resposta -> importante para testar LEFT JOIN
 
-    ('2025-01-15 17:40:00',
-     'Alagamento crítico próximo ao BUEIRO_AV2_Q10. Avaliar evacuação de moradores.',
-     'Em andamento');
+    ('2024-11-26 07:55:00', 'Obstrução detectada porém ainda sem envio de equipes.', 'Pendente');
+    -----------------------------------------------------------------------
+   
+   
 
 
 -- -----------------------------
--- ALERTAS DE ENCHENTE
--- (relacionados aos ALAGAMENTOS)
+-- 6. RELATÓRIOS (Cruzamento para Query 4)
+-- IMPORTANTE: Usar exatamente o mesmo Timestamp do Alerta_de_Acao
 -- -----------------------------
-INSERT INTO Alerta_Enchente (
-    Data_Hora,
-    Conteudo_da_Mensagem,
-    Status_da_Resposta,
-    Tipo_enchente,
-    Alagamento_PH,
-    Alagamento_DH
-) VALUES
-    ('2025-01-10 08:50:00',
-     'Alagamento detectado na região central, monitorar evolução e orientar população.',
-     'Enviado',
-     'Alagamento urbano pontual',
-     'BUEIRO_AV1_Q3',
-     '2025-01-10 08:40:00'),
 
-    ('2025-01-15 17:35:00',
-     'Alagamento severo em área residencial. Possível risco às habitações térreas.',
-     'Enviado',
-     'Alagamento urbano severo',
-     'BUEIRO_AV2_Q10',
-     '2025-01-15 17:25:00');
+-- Relatórios da Equipe de Manutenção (EM)
+INSERT INTO Relatorio_de_Acao_EM (Id_equipe, Id_alerta, Descricao_da_Intervencao, Resultados_Alcancados, Data_Hora) VALUES
+    ('333.333.333-01', '2024-11-20 10:00:00', 'Instalação de barreiras de contenção.', 'Contenção realizada.', '2024-11-20 10:30:00'),     -- Alerta 1 (2 equipes responderam)
+
+    ('333.333.333-02', '2024-11-20 10:00:00', 'Limpeza de detritos na grade de proteção.', 'Fluxo liberado.', '2024-11-20 11:00:00'),
+
+    ('333.333.333-02', '2024-11-25 14:00:00', 'Remoção de tronco de árvore.', 'Obstrução removida.', '2024-11-25 14:45:00'),    -- Alerta 2 (1 equipe respondeu)
 
 
--- -----------------------------
--- ALERTA DE ENCHENTE x USUÁRIOS
--- -----------------------------
-INSERT INTO Alerta_Enchente_Usuario (
-    Id_alerta,
-    Id_usuario
-) VALUES   -- Alerta de 10/01 para cidadãos e Defesa Civil principal
-    ('2025-01-10 08:50:00', 1),  -- João (Cidadão)
-    ('2025-01-10 08:50:00', 5),  -- Maria (Cidadão)
-    ('2025-01-10 08:50:00', 2),  -- Carlos (Defesa Civil)
-    ('2025-01-15 17:35:00', 5),  -- Alerta de 15/01 para outro conjunto de usuários -- Maria
-    ('2025-01-15 17:35:00', 6);  -- Ana (Defesa Civil)
+    ('333.333.333-01', '2024-11-18 08:00:00', 'Limpeza e remoção de lixo flutuante.', 'Fluxo normalizado.', '2024-11-18 09:10:00'),    -- Alerta adicional
+
+    ('333.333.333-02', '2024-11-27 16:30:00', 'Instalação de barreiras preventivas.', 'Aguardando estabilização do nível.', '2024-11-27 17:00:00');
 
 
--- -----------------------------
--- RELATÓRIOS DE AÇÃO - EQUIPE DE MANUTENÇÃO
--- (cada equipe gera um relatório por Alerta_de_Acao)
--- -----------------------------
-INSERT INTO Relatorio_de_Acao_EM (
-    Id_relatorio,
-    Id_equipe,
-    Id_alerta,
-    Descricao_da_Intervencao,
-    Resultados_Alcancados,
-    Data_Hora
-) VALUES
-    (1,
-     3,
-     '2025-01-10 09:00:00',
-     'Equipe Centro deslocou-se até o rio, avaliou o nível de água e realizou limpeza de detritos nas margens.',
-     'Redução do nível em aproximadamente 0,4m e melhora no escoamento imediato.',
-     '2025-01-10 11:30:00'),
+-- Relatórios da Defesa Civil (DC)
+INSERT INTO Relatorio_de_Acao_DC (Id_defesacivil, Id_alerta, Descricao_da_Intervencao, Resultados_Alcancados, Data_Hora) VALUES
+    ('222.222.222-01', '2024-11-20 10:00:00', 'Evacuação preventiva das casas ribeirinhas.', '10 famílias removidas.', '2024-11-20 10:15:00'),    -- Para o Alerta 1 (1 agente respondeu, chegou ANTES da manutenção)
 
-    (2,
-     7,
-     '2025-01-15 17:40:00',
-     'Equipe Zona Sul sinalizou a via, instalou barreiras improvisadas e verificou pontos de obstrução na drenagem.',
-     'Fluxo de água parcialmente restabelecido, mas recomendada obra estrutural futura.',
-     '2025-01-15 19:00:00');
+    
+    ('222.222.222-02', '2024-11-25 14:00:00', 'Monitoramento visual durante a operação.', 'Segurança garantida.', '2024-11-25 14:30:00'),    -- Para o Alerta 2 (1 agente respondeu)
 
-
--- -----------------------------
--- RELATÓRIOS DE AÇÃO - DEFESA CIVIL
--- -----------------------------
-INSERT INTO Relatorio_de_Acao_DC (
-    Id_relatorio,
-    Id_defesacivil,
-    Id_alerta,
-    Descricao_da_Intervencao,
-    Resultados_Alcancados,
-    Data_Hora
-) VALUES
-    (1,
-     2,
-     '2025-01-10 09:00:00',
-     'Defesa Civil monitorou níveis ao longo da manhã, acionou comunicação com a população via redes sociais e rádio local.',
-     'População orientada a evitar a região central; sem registros de vítimas.',
-     '2025-01-10 12:00:00'),
-
-    (2,
-     6,
-     '2025-01-15 17:40:00',
-     'Defesa Civil realizou vistoria em residências, identificou casas em risco e preparou pontos de acolhimento.',
-     'Três famílias realocadas temporariamente; riscos imediatos mitigados.',
-     '2025-01-15 20:15:00');
+    ('222.222.222-02', '2024-11-18 08:00:00', 'Monitoramento das margens ribeirinhas.', 'Sem evacuações necessárias.', '2024-11-18 09:00:00'),
+    ('222.222.222-01', '2024-11-27 16:30:00', 'Avaliação de risco de inundação.', 'População alertada preventivamente.', '2024-11-27 17:10:00');
