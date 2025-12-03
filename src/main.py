@@ -25,8 +25,10 @@ import configparser
 from datetime import datetime, timedelta
 
 import psycopg2
+
 from psycopg2 import OperationalError, Error
 from psycopg2.errors import UniqueViolation
+from psycopg2.errors import CheckViolation
 from tabulate import tabulate
 from dotenv import load_dotenv
 
@@ -86,57 +88,68 @@ def create_connection():
             sys.exit(1)
 
 
+
+
 def cadastrar_cidadao(conn) -> None:
     """Cadastra um novo cidadão.
 
     Passos (tudo em uma única transação):
     1) Insere em Usuario com Tipo = 'Cidadão'.
-    2) Usa o CPF gerado para inserir em Cidadao (Usuario, Nome).
+    2) Usa o CPF formatado para inserir em Cidadao (Usuario, Nome).
     """
-
+    
     print("\n=== Cadastro de Cidadão ===")
     nome = input("Nome completo do cidadão: ").strip()
-    cpf_str = input("CPF (somente números): ").strip()
+    
+    # Manter a instrução de entrada clara para o usuário
+    cpf_formatado = input("CPF (Obrigatório o formato 999.999.999-99): ").strip()
 
     if not nome:
         print("Nome não pode ser vazio.")
         return
-
-    if not cpf_str.isdigit():
-        print("CPF inválido. Use apenas números.")
+    if not cpf_formatado:
+        print("CPF não pode ser vazio.")
         return
 
-    cpf = int(cpf_str)
+    # O valor para o banco de dados é a própria string formatada
+    cpf_valor_bd = cpf_formatado 
 
     cur = conn.cursor()
     try:
-        # 1) Insere na tabela Usuario com o CPF informado
+        # 1) Insere na tabela Usuario com a string formatada
         cur.execute(
             "INSERT INTO Usuario (CPF, Tipo) VALUES (%s, %s)",
-            (cpf, "Cidadão"),
+            (cpf_valor_bd, "Cidadão"),
         )
 
-        # 2) Insere na tabela Cidadao usando o CPF como chave estrangeira
+        # 2) Insere na tabela Cidadao usando a string formatada como chave estrangeira
         cur.execute(
             "INSERT INTO Cidadao (Usuario, Nome) VALUES (%s, %s)",
-            (cpf, nome),
+            (cpf_valor_bd, nome),
         )
 
         # Tudo ocorreu bem: efetiva a transação
         conn.commit()
-        print(f"Cidadão cadastrado com sucesso. CPF: {cpf}")
+        print(f"Cidadão cadastrado com sucesso. CPF: {cpf_valor_bd}")
+        
+    # 1. Trata a exceção de CPF já existente (Chave Primária/Única)
     except UniqueViolation:
-        # CPF já existente na tabela Usuario
         conn.rollback()
         print("Já existe um usuário cadastrado com esse CPF. Escolha outro CPF.")
+        
+    # 2. 🚨 Trata a exceção de violação do CHECK Constraint (Formato ou Regras)
+    except CheckViolation:
+        conn.rollback()
+        print("CPF inválido. O formato deve ser 999.999.999-99 e/ou não atende às regras de validação do banco de dados.")
+        
+    # 3. Trata outros erros gerais do SGBD (erros de sintaxe, conexão, etc.)
     except Error as exc:
-        # Em caso de outro erro, desfaz todas as operações da transação
         conn.rollback()
         print("Erro ao cadastrar cidadão. Transação desfeita.")
-        print(exc)
+        print(f"Detalhes do erro: {exc}")
+        
     finally:
         cur.close()
-
 
 def consultar_maiores_niveis_rios(conn) -> None:
     """Consulta níveis médios de água em rios em uma janela de dias.
