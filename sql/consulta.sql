@@ -97,16 +97,19 @@ dc AS (
         MIN(Data_Hora) AS primeira_acao_dc
     FROM Relatorio_de_Acao_DC
     GROUP BY Id_alerta
-) 
+)
 SELECT
     a.Data_Hora AS id_alerta,
     a.Conteudo_da_Mensagem,
     a.Status_da_Resposta,
-    em.qtd_em,
-    dc.qtd_dc,
+    COALESCE(em.qtd_em, 0) AS qtd_em,
+    COALESCE(dc.qtd_dc, 0) AS qtd_dc,
     em.primeira_acao_em,
     dc.primeira_acao_dc,
-    LEAST(em.primeira_acao_em, dc.primeira_acao_dc) - a.Data_Hora AS tempo_resposta
+    CASE
+        WHEN em.primeira_acao_em IS NULL AND dc.primeira_acao_dc IS NULL THEN NULL
+        ELSE LEAST(COALESCE(em.primeira_acao_em, 'infinity'), COALESCE(dc.primeira_acao_dc, 'infinity')) - a.Data_Hora
+    END AS tempo_resposta
 FROM Alerta_de_Acao a
 LEFT JOIN em ON em.Id_alerta = a.Data_Hora
 LEFT JOIN dc ON dc.Id_alerta = a.Data_Hora

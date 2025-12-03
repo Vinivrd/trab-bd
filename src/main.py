@@ -137,7 +137,7 @@ def cadastrar_cidadao(conn) -> None:
         conn.rollback()
         print("Já existe um usuário cadastrado com esse CPF. Escolha outro CPF.")
         
-    # 2. 🚨 Trata a exceção de violação do CHECK Constraint (Formato ou Regras)
+    # 2. Trata a exceção de violação do CHECK Constraint (Formato ou Regras)
     except CheckViolation:
         conn.rollback()
         print("CPF inválido. O formato deve ser 999.999.999-99 e/ou não atende às regras de validação do banco de dados.")

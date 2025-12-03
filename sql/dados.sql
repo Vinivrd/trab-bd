@@ -33,28 +33,28 @@ INSERT INTO Adm (Usuario, Nome) VALUES
 -- 2. PONTOS HIDROLÓGICOS (Foco em RIOS para a Query 1)
 -- -----------------------------
 INSERT INTO Ponto_Hidrologico (Localizacao_Geografica, Tipo) VALUES
-    -- Rios
-    ('RIO_TIETE_PONTE_CENTRO',     'Rio'),  
+    ('RIO_TIETE_PONTE_CENTRO',     'Rio'),      -- Rios
+
     ('RIO_PINHEIROS_SUL',          'Rio'), 
     ('RIO_TAMANDUATEI_LESTE',      'Rio'),
     ('RIO_JAGUARE_NORTE',          'Rio'),   
     ('RIO_ARICANDUVA_LESTE',       'Rio'),
     ('RIO_GUIRAPITA_SUL',          'Rio'),
     ('RIO_VERDE_NORTE',            'Rio'),
-    -- Corregos
-    ('CORREGO_SAPATEIRO',          'Corrego'),
+    ('CORREGO_SAPATEIRO',          'Corrego'),    -- Corregos
+
     ('CORREGO_AGUA_ESPRAYADA',     'Corrego'),
     ('CORREGO_PIRAJUSSARA',        'Corrego'),
     ('CORREGO_UBERABA',            'Corrego'),
     ('CORREGO_IPIRANGA',           'Corrego'),
     ('CORREGO_TRAICAO',            'Corrego'),
     ('CORREGO_SAPATEIRO_SUL',      'Corrego'),
-    -- Bueiros
-    ('BUEIRO_RUA_XV',              'Bueiro'),
+    ('BUEIRO_RUA_XV',              'Bueiro'),    -- Bueiros
+
     ('BUEIRO_AV_PAULISTA',         'Bueiro'),
     ('BUEIRO_RUA_13_MAIO',         'Bueiro'),
     ('BUEIRO_VILA_NOVA',           'Bueiro'),
-    ('BUEIRO_PARQUE_CENTRAL',      'Bueiro');
+    ('BUEIRO_PARQUE_CENTRAL',      'Bueiro'),
     ('BUEIRO_AV_REBOUCAS',         'Bueiro'),
     ('BUEIRO_AV_FARIA_LIMA',       'Bueiro'),
     ('BUEIRO_RUA_AUGUSTA',         'Bueiro'),
@@ -67,13 +67,13 @@ INSERT INTO Rio (Ponto_Hidrologico, Capacidade_de_Drenagem) VALUES
     ('RIO_TIETE_PONTE_CENTRO', 5000.00),
     ('RIO_PINHEIROS_SUL',      4500.00),
     ('RIO_TAMANDUATEI_LESTE',  3800.00),
-    ('RIO_JAGUARE_NORTE',      2500.00);
+    ('RIO_JAGUARE_NORTE',      2500.00),
     ('RIO_ARICANDUVA_LESTE',   4100.00),
     ('RIO_GUIRAPITA_SUL',      2900.00),
     ('RIO_VERDE_NORTE',        3200.00);
 
 INSERT INTO Corrego (Ponto_Hidrologico, Capacidade_de_Drenagem) VALUES
-    ('CORREGO_SAPATEIRO',      1200.00);
+    ('CORREGO_SAPATEIRO',      1200.00),
     ('CORREGO_AGUA_ESPRAYADA', 1800.00),
     ('CORREGO_PIRAJUSSARA',    1650.00),
     ('CORREGO_UBERABA',        1100.00),
@@ -86,7 +86,7 @@ INSERT INTO Bueiro (Ponto_Hidrologico, Capacidade_de_Drenagem) VALUES
     ('BUEIRO_AV_PAULISTA',      90.00),
     ('BUEIRO_RUA_13_MAIO',      75.00),
     ('BUEIRO_VILA_NOVA',        85.00),
-    ('BUEIRO_PARQUE_CENTRAL',   95.00);
+    ('BUEIRO_PARQUE_CENTRAL',   95.00),
     ('BUEIRO_AV_REBOUCAS',      92.00),
     ('BUEIRO_AV_FARIA_LIMA',    98.00),
     ('BUEIRO_RUA_AUGUSTA',      80.00),
@@ -161,25 +161,25 @@ INSERT INTO Alerta_de_Acao (Data_Hora, Conteudo_da_Mensagem, Status_da_Resposta)
     ('2024-11-28 09:00:00', 'Alerta teste sem mobilização.', 'Pendente'),    -- Alerta 3: Sem resposta -> importante para testar LEFT JOIN
 
     ('2024-11-26 07:55:00', 'Obstrução detectada porém ainda sem envio de equipes.', 'Pendente'),
-    ('2024-11-29 11:00:00', 'Chuvas intensas em vários pontos da cidade. Mobilização ampliada.', 'Em andamento');
+    ('2024-11-29 11:00:00', 'Chuvas intensas em vários pontos da cidade. Mobilização ampliada.', 'Em andamento'),
 
-    -- Crise Urbana em novos pontos (Bueiros)
-    ('2024-11-30 17:15:00', 'Alagamento intransitável próximo ao Bueiro da Faria Lima. Trânsito parado.', 'Em andamento'),
-    ('2024-11-30 17:45:00', 'Bueiro da Av. Rebouças com retorno de esgoto. Equipe de saneamento acionada.', 'Pendente'),
+    ('2024-11-30 17:15:00', 'Alagamento intransitável próximo ao Bueiro da Faria Lima. Trânsito parado.', 'Em andamento'),    -- Crise Urbana em novos pontos (Bueiros)
 
-    -- Alertas Críticos em Rios (Conexão com novos Rios)
-    ('2024-12-01 06:30:00', 'Cota de emergência atingida no Rio Aricanduva Leste. Risco alto.', 'Em andamento'),
+    ('2024-11-30 17:45:00', 'Bueiro da Av. Reboucas com retorno de esgoto. Equipe de saneamento acionada.', 'Pendente'),
+
+    ('2024-12-01 06:30:00', 'Cota de emergência atingida no Rio Aricanduva Leste. Risco alto.', 'Em andamento'),    -- Alertas Críticos em Rios (Conexão com novos Rios)
+
     ('2024-12-01 08:00:00', 'Vazão normalizada no Rio Verde Norte após abertura de comportas.', 'Concluído'),
 
-    -- Manutenção preventiva e Ocorrências menores (Córregos)
-    ('2024-11-22 09:00:00', 'Retirada de entulho no Córrego Pirajussara finalizada.', 'Concluído'),
+    ('2024-11-22 09:00:00', 'Retirada de entulho no Córrego Pirajussara finalizada.', 'Concluído'),    -- Manutenção preventiva e Ocorrências menores (Córregos)
+
     ('2024-12-02 14:20:00', 'Denúncia de descarte irregular no Córrego Traição.', 'Pendente'), -- Outro bom caso para LEFT JOIN (sem resposta imediata)
 
-    -- Falha Sistêmica (Mensagem genérica)
-    ('2024-12-03 03:00:00', 'Falha de comunicação com sensores da Zona Leste.', 'Pendente'),
+    ('2024-12-03 03:00:00', 'Falha de comunicação com sensores da Zona Leste.', 'Pendente'),    -- Falha Sistêmica (Mensagem genérica)
 
-    -- Monitoramento contínuo (Atualização de casos antigos)
-    ('2024-11-29 12:00:00', 'Nível do Rio Tietê baixando lentamente. Monitoramento mantido.', 'Em andamento'),
+
+    ('2024-11-29 12:00:00', 'Nível do Rio Tietê baixando lentamente. Monitoramento mantido.', 'Em andamento'),    -- Monitoramento contínuo (Atualização de casos antigos)
+
     ('2024-11-25 10:00:00', 'Limpeza de grade no Bueiro Rua XV realizada com sucesso.', 'Concluído');
 
 -- 6. RELATÓRIOS (Cruzamento para Query 4)
