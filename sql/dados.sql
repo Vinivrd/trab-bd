@@ -162,41 +162,40 @@ INSERT INTO Relatorio_de_Acao_DC (Id_defesacivil, Id_alerta, Descricao_da_Interv
     ('222.222.222-02', '2024-11-29 11:00:00', 'Monitoramento de áreas críticas durante as chuvas intensas.', 'População orientada.', '2024-11-29 11:30:00');
 
 INSERT INTO Manutencao (Bueiro, Equipe_de_Manutencao, Data_Hora, Tipo_de_Servico) VALUES
-    ('BUEIRO_RUA_XV', '333.333.333-01', NOW() - INTERVAL '20 days', 'Limpeza preventiva do bueiro'),
+    ('BUEIRO_RUA_XV', '333.333.333-01', NOW() - INTERVAL '20 days', 'Limpeza preventiva do bueiro') , 
     ('BUEIRO_RUA_XV', '333.333.333-01', NOW() - INTERVAL '5 days',  'Desobstrução completa do bueiro'),
 
-    -- BUEIRO_AV_PAULISTA (Equipe de Manutenção)
     ('BUEIRO_AV_PAULISTA', '333.333.333-01', NOW() - INTERVAL '15 days', 'Limpeza preventiva do bueiro'),
     ('BUEIRO_AV_PAULISTA', '333.333.333-01', NOW() - INTERVAL '6 days',  'Desobstrução após acúmulo de lixo'),
 
-    -- BUEIRO_RUA_13_MAIO (Equipe de Manutenção)
-    ('BUEIRO_RUA_13_MAIO', '333.333.333-01', NOW() - INTERVAL '25 days', 'Limpeza preventiva do bueiro'),
+    ('BUEIRO_RUA_13_MAIO', '333.333.333-01', NOW() - INTERVAL '25 days', 'Limpeza preventiva do bueiro'),     -- BUEIRO_RUA_13_MAIO (Equipe de Manutenção)
+
     ('BUEIRO_RUA_13_MAIO', '333.333.333-01', NOW() - INTERVAL '8 days',  'Reforço de grade de proteção'),
 
-    -- BUEIRO_VILA_NOVA (Equipe de Manutenção)
-    ('BUEIRO_VILA_NOVA', '333.333.333-02', NOW() - INTERVAL '18 days', 'Limpeza preventiva do bueiro'),
+    ('BUEIRO_VILA_NOVA', '333.333.333-02', NOW() - INTERVAL '18 days', 'Limpeza preventiva do bueiro'),     -- BUEIRO_VILA_NOVA (Equipe de Manutenção)
+
     ('BUEIRO_VILA_NOVA', '333.333.333-02', NOW() - INTERVAL '7 days',  'Desobstrução de detritos'),
 
-    -- BUEIRO_PARQUE_CENTRAL (Equipe de Manutenção)
-    ('BUEIRO_PARQUE_CENTRAL', '333.333.333-02', NOW() - INTERVAL '12 days', 'Limpeza preventiva do bueiro'),
+    ('BUEIRO_PARQUE_CENTRAL', '333.333.333-02', NOW() - INTERVAL '12 days', 'Limpeza preventiva do bueiro'),     -- BUEIRO_PARQUE_CENTRAL (Equipe de Manutenção)
+
     ('BUEIRO_PARQUE_CENTRAL', '333.333.333-02', NOW() - INTERVAL '4 days',  'Desobstrução completa do bueiro');
 
 INSERT INTO Alagamento (Ponto_Hidrologico, Data_Hora, Severidade, Extensao_da_Area_Afetada, Bairros_Afetados) VALUES
     ('BUEIRO_RUA_XV', NOW() - INTERVAL '3 days', 8,  50.00, 'Centro'),
     ('BUEIRO_RUA_XV', NOW() - INTERVAL '1 day',  9,  70.00, 'Centro'),
 
-    -- BUEIRO_AV_PAULISTA (última manutenção ~6 dias)
-    ('BUEIRO_AV_PAULISTA', NOW() - INTERVAL '5 days', 8, 60.00, 'Centro'),
+    ('BUEIRO_AV_PAULISTA', NOW() - INTERVAL '5 days', 8, 60.00, 'Centro'),     -- BUEIRO_AV_PAULISTA (última manutenção ~6 dias)
+
     ('BUEIRO_AV_PAULISTA', NOW() - INTERVAL '2 days', 9, 80.00, 'Centro'),
 
-    -- BUEIRO_RUA_13_MAIO (última manutenção ~8 dias)
-    ('BUEIRO_RUA_13_MAIO', NOW() - INTERVAL '6 days', 7, 40.00, 'Bela Vista'),
+    ('BUEIRO_RUA_13_MAIO', NOW() - INTERVAL '6 days', 7, 40.00, 'Bela Vista'),     -- BUEIRO_RUA_13_MAIO (última manutenção ~8 dias)
 
-    -- BUEIRO_VILA_NOVA (última manutenção ~7 dias)
-    ('BUEIRO_VILA_NOVA', NOW() - INTERVAL '5 days', 8, 55.00, 'Vila Nova'),
 
-    -- BUEIRO_PARQUE_CENTRAL (última manutenção ~4 dias)
-    ('BUEIRO_PARQUE_CENTRAL', NOW() - INTERVAL '3 days', 9, 70.00, 'Parque Central');
+    ('BUEIRO_VILA_NOVA', NOW() - INTERVAL '5 days', 8, 55.00, 'Vila Nova'),     -- BUEIRO_VILA_NOVA (última manutenção ~7 dias)
+
+
+    ('BUEIRO_PARQUE_CENTRAL', NOW() - INTERVAL '3 days', 9, 70.00, 'Parque Central');     -- BUEIRO_PARQUE_CENTRAL (última manutenção ~4 dias)
+
 
 INSERT INTO Monitora (Ponto_Hidrologico, Defesa_Civil) VALUES
     ('BUEIRO_RUA_XV',         '222.222.222-01'),
