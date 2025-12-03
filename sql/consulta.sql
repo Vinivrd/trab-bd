@@ -51,10 +51,8 @@ ORDER BY
     qtd_alagamentos_pos DESC;
 
 
--- 3 Desempenho da Defesa Civil: alertas respondidos e tempo médio de resposta
--- Para cada agente da Defesa Civil, conta quantos alertas de ação ele respondeu
--- e o tempo médio de resposta entre a emissão do alerta e a primeira ação.
 
+--- Query3: Análise de Performance: Agilidade e Volume de Resposta da Defesa Civil
 WITH primeira_acao_dc AS (
     SELECT
         r.Id_defesacivil,
@@ -99,7 +97,7 @@ dc AS (
         MIN(Data_Hora) AS primeira_acao_dc
     FROM Relatorio_de_Acao_DC
     GROUP BY Id_alerta
-)
+) 
 SELECT
     a.Data_Hora AS id_alerta,
     a.Conteudo_da_Mensagem,
